@@ -1,104 +1,73 @@
-<!-- templates/index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProductPulse AI</title>
-
+    <title>ProductPulse AI | Spatial Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="background-glow glow-1"></div>
-<div class="background-glow glow-2"></div>
+<div class="ambient-glow glow-primary"></div>
+<div class="ambient-glow glow-accent"></div>
 
 <nav class="navbar">
     <div class="logo">
+        <div class="logo-icon"></div>
         ProductPulse AI
     </div>
-
     <div class="nav-tag">
-        AI Product Intelligence
+        Workspace Alpha
     </div>
 </nav>
 
-<section class="hero">
+<div class="dashboard-container">
+    
+    <!-- Sidebar: Input Section -->
+    <aside class="input-section">
+        <div class="header-titles">
+            <h1>Analyze <span>Ideas</span></h1>
+            <p>Generate deep product intelligence, market fit, and execution roadmaps in seconds.</p>
+        </div>
+        
+        <div class="glass-panel idea-form">
+            <textarea 
+                id="ideaInput" 
+                placeholder="Describe your startup concept, target audience, and core problem you're solving...&#10;&#10;e.g., An AI coding assistant tailored specifically for video game engines (Unity/Unreal)."
+            ></textarea>
+            <button id="analyzeBtn" class="analyze-btn">Initialize Analysis</button>
+        </div>
+    </aside>
 
-    <div class="hero-content">
+    <!-- Main Content: Results Section -->
+    <main class="results-section glass-panel">
+        
+        <div id="emptyState" class="empty-state fade-in">
+            <div class="empty-state-icon">✨</div>
+            <h2>Awaiting Telemetry</h2>
+            <p>Enter your product idea to generate the spatial analysis.</p>
+        </div>
 
-        <span class="badge">
-            Powered by Gemini AI
-        </span>
+        <div id="loadingSection" class="loader-container hidden">
+            <div class="spinner"></div>
+            <h3>Synthesizing Intelligence...</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Processing multi-dimensional market data.</p>
+        </div>
 
-        <h1>
-            Turn Startup Ideas Into
-            <span>Investor-Ready Products</span>
-        </h1>
+        <div id="resultContainer" class="hidden">
+            <!-- Dynamic Parsed Content Goes Here -->
+        </div>
 
-        <p>
-            Analyze Product-Market Fit, SWOT, Revenue Models,
-            Competitors, MVP Roadmaps and Market Opportunities
-            using AI.
-        </p>
+    </main>
 
-    </div>
-
-</section>
-
-<section class="analyzer-card">
-
-    <div class="card-header">
-        <h2>Analyze Your Product Idea</h2>
-        <p>Describe your startup or product concept below.</p>
-    </div>
-
-    <textarea
-        id="ideaInput"
-        placeholder="Example: An AI-powered platform that helps college students discover internships based on skills, projects, and interests..."
-    ></textarea>
-
-    <button id="analyzeBtn">
-        Analyze Idea
-    </button>
-
-</section>
-
-<section class="loading-section hidden" id="loadingSection">
-
-    <div class="loader"></div>
-
-    <h3>Analyzing Product Idea...</h3>
-
-    <p>
-        Running Product-Market Fit Evaluation,
-        Market Research and Business Analysis.
-    </p>
-
-</section>
-
-<section class="result-section hidden" id="resultSection">
-
-    <div class="result-header">
-        <h2>AI Product Analysis</h2>
-    </div>
-
-    <div id="resultBox"></div>
-
-</section>
+</div>
 
 <footer>
-
-    <p>
-        ProductPulse AI © 2026
-    </p>
-
+    ProductPulse AI Spatial Dashboard &copy; 2026. Data generated via Llama 3 API.
 </footer>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
-
 </body>
 </html>
