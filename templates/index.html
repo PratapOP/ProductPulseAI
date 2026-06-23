@@ -1,0 +1,104 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProductPulse AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="background-glow glow-1"></div>
+<div class="background-glow glow-2"></div>
+
+<nav class="navbar">
+    <div class="logo">
+        ProductPulse AI
+    </div>
+
+    <div class="nav-tag">
+        AI Product Intelligence
+    </div>
+</nav>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <span class="badge">
+            Powered by Gemini AI
+        </span>
+
+        <h1>
+            Turn Startup Ideas Into
+            <span>Investor-Ready Products</span>
+        </h1>
+
+        <p>
+            Analyze Product-Market Fit, SWOT, Revenue Models,
+            Competitors, MVP Roadmaps and Market Opportunities
+            using AI.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="analyzer-card">
+
+    <div class="card-header">
+        <h2>Analyze Your Product Idea</h2>
+        <p>Describe your startup or product concept below.</p>
+    </div>
+
+    <textarea
+        id="ideaInput"
+        placeholder="Example: An AI-powered platform that helps college students discover internships based on skills, projects, and interests..."
+    ></textarea>
+
+    <button id="analyzeBtn">
+        Analyze Idea
+    </button>
+
+</section>
+
+<section class="loading-section hidden" id="loadingSection">
+
+    <div class="loader"></div>
+
+    <h3>Analyzing Product Idea...</h3>
+
+    <p>
+        Running Product-Market Fit Evaluation,
+        Market Research and Business Analysis.
+    </p>
+
+</section>
+
+<section class="result-section hidden" id="resultSection">
+
+    <div class="result-header">
+        <h2>AI Product Analysis</h2>
+    </div>
+
+    <div id="resultBox"></div>
+
+</section>
+
+<footer>
+
+    <p>
+        ProductPulse AI © 2026
+    </p>
+
+</footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
