@@ -1,240 +1,232 @@
 // static/script.js
 
 const analyzeBtn = document.getElementById("analyzeBtn");
-const ideaInput = document.getElementById("ideaInput");
+const ideaInput  = document.getElementById("ideaInput");
 
-const emptyState = document.getElementById("emptyState");
 const loadingSection = document.getElementById("loadingSection");
-const resultContainer = document.getElementById("resultContainer");
+const resultSection  = document.getElementById("resultSection");
+const resultBox      = document.getElementById("resultBox");
 
 analyzeBtn.addEventListener("click", async () => {
+
     const idea = ideaInput.value.trim();
     if (!idea) {
-        alert("Please provide a product concept to analyze.");
+        alert("Please enter a startup idea.");
         return;
     }
 
-    // UI Updates for loading
-    emptyState.classList.add("hidden");
-    resultContainer.classList.add("hidden");
     loadingSection.classList.remove("hidden");
-    
+    resultSection.classList.add("hidden");
     analyzeBtn.disabled = true;
-    analyzeBtn.innerText = "Processing...";
+    analyzeBtn.innerText = "Analyzing...";
 
     try {
         const response = await fetch("/analyze", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ idea: idea })
+            body: JSON.stringify({ idea })
         });
 
         const data = await response.json();
 
-        if(data.success) {
+        if (data.success) {
             renderDashboard(data.result);
             loadingSection.classList.add("hidden");
-            resultContainer.classList.remove("hidden");
-            resultContainer.classList.add("fade-in");
+            resultSection.classList.remove("hidden");
+            resultSection.scrollIntoView({ behavior: "smooth" });
         } else {
             throw new Error(data.result);
         }
+
     } catch (error) {
         loadingSection.classList.add("hidden");
-        resultContainer.classList.remove("hidden");
-        resultContainer.innerHTML = `<div class="widget" style="border-color: #ef4444;"><h3 style="color:#ef4444;">Analysis Error</h3><p>${error.message}</p></div>`;
+        resultSection.classList.remove("hidden");
+        resultBox.innerHTML = `
+            <div class="widget" style="border-color: var(--red);">
+                <h3 style="color: var(--red); margin-bottom:10px;">Analysis Error</h3>
+                <p style="color: var(--text-muted);">${error.message}</p>
+            </div>
+        `;
     }
 
     analyzeBtn.disabled = false;
-    analyzeBtn.innerText = "⚡ Initialize Analysis";
+    analyzeBtn.innerText = "Analyze Idea";
 });
 
-function renderDashboard(text) {
-    // Basic cleanup
-    text = text.replace(/\*\*/g, ""); // remove bold markers
 
-    // Helper to extract sections
-    const extractSection = (title, nextTitle) => {
-        const regex = new RegExp(`${title}:?[\\s\\S]*?(?=${nextTitle || '$'})`, 'i');
-        const match = text.match(regex);
-        if(!match) return "";
-        let content = match[0].replace(new RegExp(`${title}:?`, 'i'), '').trim();
-        return content;
+/* ============================================
+   DASHBOARD RENDERER
+   Parses structured AI text into styled widgets
+============================================ */
+function renderDashboard(text) {
+
+    text = text.replace(/\*\*/g, "");
+
+    const extract = (title, next) => {
+        const re = new RegExp(`${title}:?[\\s\\S]*?(?=${next || '$'})`, 'i');
+        const m = text.match(re);
+        if (!m) return "";
+        return m[0].replace(new RegExp(`${title}:?`, 'i'), '').trim();
     };
 
-    const names = extractSection("STARTUP NAME SUGGESTIONS", "PRODUCT SUMMARY");
-    const summary = extractSection("PRODUCT SUMMARY", "PROBLEM STATEMENT");
-    const problem = extractSection("PROBLEM STATEMENT", "TARGET AUDIENCE");
-    const audience = extractSection("TARGET AUDIENCE", "MARKET OPPORTUNITY");
-    const opportunity = extractSection("MARKET OPPORTUNITY", "SWOT ANALYSIS");
-    
-    const swot = extractSection("SWOT ANALYSIS", "PRODUCT MARKET FIT SCORE");
-    
-    const pmfStr = extractSection("PRODUCT MARKET FIT SCORE", "INVESTOR READINESS SCORE");
-    const invStr = extractSection("INVESTOR READINESS SCORE", "REVENUE MODEL");
-    
-    const revenue = extractSection("REVENUE MODEL", "COMPETITOR ANALYSIS");
-    const competitors = extractSection("COMPETITOR ANALYSIS", "RISK FACTORS");
-    const risks = extractSection("RISK FACTORS", "MVP ROADMAP");
-    const roadmap = extractSection("MVP ROADMAP", "FINAL VERDICT");
-    const verdict = extractSection("FINAL VERDICT", null);
+    const names       = extract("STARTUP NAME SUGGESTIONS", "PRODUCT SUMMARY");
+    const summary     = extract("PRODUCT SUMMARY",          "PROBLEM STATEMENT");
+    const problem     = extract("PROBLEM STATEMENT",        "TARGET AUDIENCE");
+    const audience    = extract("TARGET AUDIENCE",          "MARKET OPPORTUNITY");
+    const opportunity = extract("MARKET OPPORTUNITY",       "SWOT ANALYSIS");
+    const swot        = extract("SWOT ANALYSIS",            "PRODUCT MARKET FIT SCORE");
+    const pmfStr      = extract("PRODUCT MARKET FIT SCORE", "INVESTOR READINESS SCORE");
+    const invStr      = extract("INVESTOR READINESS SCORE", "REVENUE MODEL");
+    const revenue     = extract("REVENUE MODEL",            "COMPETITOR ANALYSIS");
+    const competitors = extract("COMPETITOR ANALYSIS",      "RISK FACTORS");
+    const risks       = extract("RISK FACTORS",             "MVP ROADMAP");
+    const roadmap     = extract("MVP ROADMAP",              "FINAL VERDICT");
+    const verdict     = extract("FINAL VERDICT",            null);
 
-    // Extract Overall Scores
-    const pmfScoreMatch = pmfStr.match(/Overall Score:\s*(\d+)/i);
-    const pmfScore = pmfScoreMatch ? pmfScoreMatch[1] : 75;
+    // Scores
+    const pmfScore = (pmfStr.match(/Overall Score:\s*(\d+)/i) || [null, 75])[1];
+    const invScore = (invStr.match(/Overall Score:\s*(\d+)/i) || [null, 70])[1];
 
-    const invScoreMatch = invStr.match(/Overall Score:\s*(\d+)/i);
-    const invScore = invScoreMatch ? invScoreMatch[1] : 70;
+    // SWOT parts
+    const sStr = (swot.match(/Strengths:([\s\S]*?)Weaknesses:/i)    || ["",""])[1];
+    const wStr = (swot.match(/Weaknesses:([\s\S]*?)Opportunities:/i) || ["",""])[1];
+    const oStr = (swot.match(/Opportunities:([\s\S]*?)Threats:/i)   || ["",""])[1];
+    const tStr = (swot.match(/Threats:([\s\S]*?)$/i)               || ["",""])[1];
 
-    // Parse SWOT
-    const sMatch = swot.match(/Strengths:([\s\S]*?)Weaknesses:/i) || ["",""];
-    const wMatch = swot.match(/Weaknesses:([\s\S]*?)Opportunities:/i) || ["",""];
-    const oMatch = swot.match(/Opportunities:([\s\S]*?)Threats:/i) || ["",""];
-    const tMatch = swot.match(/Threats:([\s\S]*?)$/i) || ["",""];
-
-    // Parse Roadmap
-    let roadmapHtml = '';
-    const phases = roadmap.split(/Phase \d+:/i).filter(p => p.trim() !== '');
-    phases.forEach((p, idx) => {
-        roadmapHtml += `
-            <div class="phase">
-                <h4>Phase ${idx + 1}</h4>
-                ${formatList(p)}
-            </div>
-        `;
+    // Roadmap phases
+    let roadmapHtml = "";
+    const phases = roadmap.split(/Phase \d+:/i).filter(p => p.trim());
+    phases.forEach((p, i) => {
+        roadmapHtml += `<div class="phase"><h4>Phase ${i + 1}</h4>${listify(p)}</div>`;
     });
 
-    // Build Names Badges
-    const namesList = names.split('\n').filter(n => n.trim().startsWith('-')).map(n => n.replace('-', '').trim());
-    const namesHtml = namesList.map(n => `<div class="name-badge">${n}</div>`).join('');
+    // Names
+    const nameBadges = names
+        .split("\n")
+        .filter(n => n.trim().startsWith("-"))
+        .map(n => `<span class="n-badge">${n.replace("-", "").trim()}</span>`)
+        .join("");
 
-    const html = `
-        <div style="margin-bottom: 20px;">
-            <div class="widget-title"><span class="dot dot-purple"></span>Generated Nomenclature</div>
-            <div class="names-grid">${namesHtml || 'No names generated.'}</div>
+    resultBox.innerHTML = `
+
+        <!-- Names -->
+        <div class="widget fade-in">
+            <div class="widget-label"><span class="wl-dot dot-purple"></span>Startup Name Suggestions</div>
+            <div class="names-wrap">${nameBadges || "No names generated."}</div>
         </div>
 
-        <div class="dashboard-grid" style="margin-bottom: 22px;">
+        <!-- Scores -->
+        <div class="dash-grid fade-in">
             <div class="widget score-widget">
-                <div class="score-circle" style="--score: ${pmfScore};">
-                    <span class="score-value">${pmfScore}</span>
+                <div class="score-ring" style="--score:${pmfScore};">
+                    <span class="score-val">${pmfScore}</span>
                 </div>
-                <div class="score-info">
-                    <div class="widget-title"><span class="dot dot-purple"></span>Product-Market Fit</div>
-                    <p>Market Demand &amp; Scalability</p>
+                <div class="score-meta">
+                    <div class="widget-label"><span class="wl-dot dot-purple"></span>Product-Market Fit</div>
+                    <p>Market demand and scalability index</p>
                 </div>
             </div>
             <div class="widget score-widget">
-                <div class="score-circle investor" style="--score: ${invScore};">
-                    <span class="score-value">${invScore}</span>
+                <div class="score-ring ring-pink" style="--score:${invScore};">
+                    <span class="score-val">${invScore}</span>
                 </div>
-                <div class="score-info">
-                    <div class="widget-title"><span class="dot dot-pink"></span>Investor Readiness</div>
-                    <p>Funding Attractiveness</p>
+                <div class="score-meta">
+                    <div class="widget-label"><span class="wl-dot dot-pink"></span>Investor Readiness</div>
+                    <p>Funding attractiveness and growth potential</p>
                 </div>
             </div>
         </div>
 
-        <div class="dashboard-grid" style="margin-bottom: 22px;">
+        <!-- Summary + Problem -->
+        <div class="dash-grid fade-in">
             <div class="widget">
-                <div class="widget-title"><span class="dot dot-green"></span>Product Summary</div>
-                <div class="content-block">${formatList(summary)}</div>
+                <div class="widget-label"><span class="wl-dot dot-green"></span>Product Summary</div>
+                <div class="content">${listify(summary)}</div>
             </div>
             <div class="widget">
-                <div class="widget-title"><span class="dot dot-red"></span>Problem Statement</div>
-                <div class="content-block">${formatList(problem)}</div>
+                <div class="widget-label"><span class="wl-dot dot-red"></span>Problem Statement</div>
+                <div class="content">${listify(problem)}</div>
             </div>
         </div>
 
-        <div class="widget" style="margin-bottom: 22px;">
-            <div class="widget-title"><span class="dot dot-yellow"></span>SWOT Matrix</div>
+        <!-- SWOT -->
+        <div class="widget fade-in">
+            <div class="widget-label"><span class="wl-dot dot-yellow"></span>SWOT Matrix</div>
             <div class="swot-grid">
-                <div class="swot-item strengths">
-                    <h4>⚡ Strengths</h4>
-                    ${formatList(sMatch[1])}
-                </div>
-                <div class="swot-item weaknesses">
-                    <h4>⚠ Weaknesses</h4>
-                    ${formatList(wMatch[1])}
-                </div>
-                <div class="swot-item opportunities">
-                    <h4>✦ Opportunities</h4>
-                    ${formatList(oMatch[1])}
-                </div>
-                <div class="swot-item threats">
-                    <h4>⚑ Threats</h4>
-                    ${formatList(tMatch[1])}
-                </div>
+                <div class="swot-item s-str"><h4>Strengths</h4>${listify(sStr)}</div>
+                <div class="swot-item s-wk"><h4>Weaknesses</h4>${listify(wStr)}</div>
+                <div class="swot-item s-opp"><h4>Opportunities</h4>${listify(oStr)}</div>
+                <div class="swot-item s-thr"><h4>Threats</h4>${listify(tStr)}</div>
             </div>
         </div>
 
-        <div class="dashboard-grid" style="margin-bottom: 22px;">
+        <!-- Audience + Market -->
+        <div class="dash-grid fade-in">
             <div class="widget">
-                <div class="widget-title"><span class="dot dot-blue"></span>Target Audience</div>
-                <div class="content-block">${formatList(audience)}</div>
+                <div class="widget-label"><span class="wl-dot dot-blue"></span>Target Audience</div>
+                <div class="content">${listify(audience)}</div>
             </div>
             <div class="widget">
-                <div class="widget-title"><span class="dot dot-green"></span>Market Opportunity</div>
-                <div class="content-block">${formatList(opportunity)}</div>
+                <div class="widget-label"><span class="wl-dot dot-green"></span>Market Opportunity</div>
+                <div class="content">${listify(opportunity)}</div>
             </div>
         </div>
 
-        <div class="widget" style="margin-bottom: 22px;">
-            <div class="widget-title"><span class="dot dot-yellow"></span>Revenue Model</div>
-            <div class="content-block">${formatList(revenue)}</div>
+        <!-- Revenue Model -->
+        <div class="widget fade-in">
+            <div class="widget-label"><span class="wl-dot dot-yellow"></span>Revenue Model</div>
+            <div class="content">${listify(revenue)}</div>
         </div>
 
-        <div class="widget" style="margin-bottom: 22px;">
-            <div class="widget-title"><span class="dot dot-purple"></span>MVP Execution Roadmap</div>
-            <div class="roadmap">
-                ${roadmapHtml || formatList(roadmap)}
-            </div>
+        <!-- MVP Roadmap -->
+        <div class="widget fade-in">
+            <div class="widget-label"><span class="wl-dot dot-purple"></span>MVP Execution Roadmap</div>
+            <div class="roadmap">${roadmapHtml || listify(roadmap)}</div>
         </div>
 
-        <div class="dashboard-grid" style="margin-bottom: 22px;">
+        <!-- Competitors + Risks -->
+        <div class="dash-grid fade-in">
             <div class="widget">
-                <div class="widget-title"><span class="dot dot-red"></span>Competitor Analysis</div>
-                <div class="content-block">${formatList(competitors)}</div>
+                <div class="widget-label"><span class="wl-dot dot-red"></span>Competitor Analysis</div>
+                <div class="content">${listify(competitors)}</div>
             </div>
             <div class="widget">
-                <div class="widget-title"><span class="dot dot-yellow"></span>Risk Factors</div>
-                <div class="content-block">${formatList(risks)}</div>
+                <div class="widget-label"><span class="wl-dot dot-yellow"></span>Risk Factors</div>
+                <div class="content">${listify(risks)}</div>
             </div>
         </div>
 
-        <div class="widget verdict-widget">
-            <div class="widget-title"><span class="dot dot-pink"></span>Final Verdict &amp; Strategy</div>
-            <div class="content-block">${formatParagraphs(verdict)}</div>
+        <!-- Final Verdict -->
+        <div class="widget verdict-widget fade-in">
+            <div class="widget-label"><span class="wl-dot dot-pink"></span>Final Verdict & Strategy</div>
+            <div class="content">${paragraphify(verdict)}</div>
         </div>
     `;
-
-    resultContainer.innerHTML = html;
 }
 
-function formatList(text) {
-    if (!text) return '';
-    const lines = text.split('\n').filter(l => l.trim() !== '');
-    let isList = false;
-    let html = '';
-    
-    lines.forEach(line => {
+/* Converts bullet-point text to an <ul> HTML list */
+function listify(text) {
+    if (!text) return "";
+    let inList = false, html = "";
+    text.split("\n").filter(l => l.trim()).forEach(line => {
         line = line.trim();
-        if (line.startsWith('-') || line.startsWith('•')) {
-            if (!isList) { html += '<ul>'; isList = true; }
+        if (line.startsWith("-") || line.startsWith("•")) {
+            if (!inList) { html += "<ul>"; inList = true; }
             html += `<li>${line.substring(1).trim()}</li>`;
         } else {
-            if (isList) { html += '</ul>'; isList = false; }
+            if (inList) { html += "</ul>"; inList = false; }
             html += `<p>${line}</p>`;
         }
     });
-    if (isList) html += '</ul>';
+    if (inList) html += "</ul>";
     return html;
 }
 
-function formatParagraphs(text) {
-    if (!text) return '';
-    return text.split('\n').filter(p => p.trim() !== '').map(p => {
-        if(p.trim().startsWith('-')) return `<li>${p.trim().substring(1)}</li>`;
-        return `<p style="margin-bottom: 8px;">${p}</p>`;
-    }).join('');
+/* Converts multi-line text into paragraphs */
+function paragraphify(text) {
+    if (!text) return "";
+    return text.split("\n").filter(p => p.trim()).map(p => {
+        if (p.trim().startsWith("-")) return `<li>${p.trim().substring(1)}</li>`;
+        return `<p>${p}</p>`;
+    }).join("");
 }

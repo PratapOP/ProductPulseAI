@@ -5,75 +5,156 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ProductPulse AI | Startup Intelligence</title>
     <meta name="description" content="AI-powered product management assistant that transforms startup ideas into actionable investor-ready business intelligence.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<!-- Decorative Blobs (image-style wave accents) -->
-<div class="blob blob-1"></div>
-<div class="blob blob-2"></div>
-<div class="blob blob-3"></div>
+    <!-- ========================
+         NAVBAR
+    ========================= -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-mark"></div>
+            ProductPulse AI
+        </div>
+        <div class="nav-links">
+            <a href="#hero">Home</a>
+            <a href="#analyzer">Analyze</a>
+            <a href="#results">Results</a>
+        </div>
+        <div class="nav-actions">
+            <a href="#analyzer" class="btn-primary">Get Started</a>
+        </div>
+    </nav>
 
-<!-- Navbar -->
-<nav class="navbar">
-    <div class="logo">
-        <div class="logo-icon"></div>
-        ProductPulse AI
-    </div>
-    <div class="nav-tag">Startup Intelligence ✦</div>
-</nav>
+    <!-- ========================
+         HERO SECTION
+    ========================= -->
+    <section class="hero" id="hero">
 
-<!-- Dashboard Layout -->
-<div class="dashboard-container">
-
-    <!-- Left: Input Sidebar -->
-    <aside class="input-section">
-        <div class="header-titles">
-            <h1>Turn Ideas Into <span>Investor-Ready</span> Products</h1>
-            <p>Get AI-powered product analysis — market fit, SWOT, revenue models, and full MVP roadmaps in seconds.</p>
+        <!-- Purple Wave SVG (exact ref-image style) -->
+        <div class="hero-wave">
+            <svg viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin slice">
+                <defs>
+                    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%"   stop-color="#7C4DDD"/>
+                        <stop offset="100%" stop-color="#3D1FA0"/>
+                    </linearGradient>
+                </defs>
+                <path d="M0,0 L0,420 Q80,480 180,440 Q300,390 380,460 Q460,530 580,500 Q700,470 780,520 L900,540 L900,0 Z" fill="url(#waveGrad)" opacity="0.95"/>
+                <path d="M0,0 L0,360 Q120,320 220,380 Q340,440 440,400 Q540,360 640,410 Q740,460 900,430 L900,0 Z" fill="#5B2BD5" opacity="0.7"/>
+            </svg>
         </div>
 
-        <div class="feature-pills">
-            <span class="pill pill-purple">✦ SWOT Analysis</span>
-            <span class="pill pill-green">✔ Market Fit Score</span>
-            <span class="pill pill-pink">♟ Competitor Map</span>
-            <span class="pill pill-yellow">⚡ MVP Roadmap</span>
-        </div>
+        <!-- Accent Geometric Shapes (ref-image style, no emoji) -->
+        <div class="shape shape-plus shape-green"></div>
+        <div class="shape shape-zigzag shape-yellow"></div>
+        <div class="shape shape-triangle shape-pink"></div>
+        <div class="shape shape-circle shape-purple"></div>
 
-        <div class="idea-form">
+        <!-- Hero Content -->
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-badge">AI Product Intelligence</div>
+                <h1>
+                    Turn Startup Ideas Into
+                    <strong>Investor-Ready Products</strong>
+                </h1>
+                <p>
+                    Generate deep product analysis — market fit, SWOT, revenue models,
+                    competitor mapping, and full MVP roadmaps using AI.
+                </p>
+                <a href="#analyzer" class="btn-primary btn-large">Analyze My Idea</a>
+            </div>
+
+            <div class="hero-visual">
+                <!-- Floating Cards (ref-image style) -->
+                <div class="float-card card-chart">
+                    <div class="card-dot card-dot-green"></div>
+                    <span>Market Fit Score</span>
+                    <div class="mini-chart">
+                        <div class="pie-ring" style="--fill: 78;"></div>
+                        <span class="pie-val">78%</span>
+                    </div>
+                </div>
+                <div class="float-card card-url">
+                    <div class="url-bar">
+                        <div class="url-dot"></div>
+                        <div class="url-dot"></div>
+                        <div class="url-dot"></div>
+                        <span>productpulse.ai/analyze</span>
+                    </div>
+                </div>
+                <div class="float-card card-users">
+                    <div class="user-row">
+                        <div class="user-avatar av1"></div>
+                        <div class="user-info"><div class="ui-line long"></div><div class="ui-line short"></div></div>
+                    </div>
+                    <div class="user-row">
+                        <div class="user-avatar av2"></div>
+                        <div class="user-info"><div class="ui-line long"></div><div class="ui-line short"></div></div>
+                    </div>
+                </div>
+
+                <img
+                    src="{{ url_for('static', filename='laptop_hero.png') }}"
+                    alt="ProductPulse AI Dashboard Illustration"
+                    class="hero-laptop"
+                />
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================
+         ANALYZER SECTION
+    ========================= -->
+    <section class="analyzer-section" id="analyzer">
+        <div class="section-label">AI Analysis Engine</div>
+        <h2 class="section-title">Analyze Your Product Idea</h2>
+        <p class="section-sub">Describe your startup or product concept below and let AI generate a complete business intelligence report.</p>
+
+        <div class="analyzer-card">
             <textarea
                 id="ideaInput"
-                placeholder="Describe your startup concept, who it's for, and the problem it solves...&#10;&#10;e.g., An AI-powered meal planner that adapts to your groceries, budget, and dietary needs weekly."
+                placeholder="Describe your startup concept, the problem it solves, and your target audience...&#10;&#10;e.g., An AI-powered platform that helps college students discover internships based on skills, projects, and interests."
             ></textarea>
-            <button id="analyzeBtn" class="analyze-btn">⚡ Initialize Analysis</button>
+            <button id="analyzeBtn" class="btn-primary btn-large">Analyze Idea</button>
         </div>
-    </aside>
+    </section>
 
-    <!-- Right: Results Canvas -->
-    <main class="results-section">
+    <!-- ========================
+         LOADING
+    ========================= -->
+    <section class="loading-section hidden" id="loadingSection">
+        <div class="loader-ring"></div>
+        <h3>Analyzing Product Idea...</h3>
+        <p>Running Product-Market Fit Evaluation, Market Research and Business Analysis.</p>
+    </section>
 
-        <div id="emptyState" class="empty-state fade-in">
-            <div class="empty-state-icon">🚀</div>
-            <h2>Awaiting Telemetry</h2>
-            <p>Enter your product idea on the left to generate the full intelligence report.</p>
+    <!-- ========================
+         RESULTS
+    ========================= -->
+    <section class="result-section hidden" id="resultSection">
+        <div class="section-label">Intelligence Report</div>
+        <h2 class="section-title">AI Product Analysis</h2>
+        <div id="resultBox"></div>
+    </section>
+
+    <!-- ========================
+         FOOTER
+    ========================= -->
+    <footer>
+        <div class="footer-inner">
+            <div class="logo">
+                <div class="logo-mark"></div>
+                ProductPulse AI
+            </div>
+            <p>ProductPulse AI &copy; 2026 &mdash; Powered by Llama 3 &amp; Groq API</p>
         </div>
+    </footer>
 
-        <div id="loadingSection" class="loader-container hidden">
-            <div class="spinner"></div>
-            <h3>Synthesizing Intelligence...</h3>
-            <p>Running market analysis, scoring, and roadmap generation.</p>
-        </div>
-
-        <div id="resultContainer" class="hidden"></div>
-
-    </main>
-
-</div>
-
-<footer>
-    <p>Built with ♥ by <span>ProductPulse AI</span> &copy; 2026 — Powered by Llama 3 &amp; Groq API</p>
-</footer>
-
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
