@@ -46,7 +46,7 @@ analyzeBtn.addEventListener("click", async () => {
     }
 
     analyzeBtn.disabled = false;
-    analyzeBtn.innerText = "Initialize Analysis";
+    analyzeBtn.innerText = "⚡ Initialize Analysis";
 });
 
 function renderDashboard(text) {
@@ -109,106 +109,102 @@ function renderDashboard(text) {
     const namesHtml = namesList.map(n => `<div class="name-badge">${n}</div>`).join('');
 
     const html = `
-        <div style="padding: 24px;">
-            <div style="margin-bottom: 24px;">
-                <div class="widget-title">Generated Nomenclature</div>
-                <div class="names-grid">${namesHtml || 'No names generated.'}</div>
-            </div>
+        <div style="margin-bottom: 20px;">
+            <div class="widget-title"><span class="dot dot-purple"></span>Generated Nomenclature</div>
+            <div class="names-grid">${namesHtml || 'No names generated.'}</div>
+        </div>
 
-            <div class="dashboard-grid" style="margin-bottom: 24px;">
-                <div class="widget score-widget">
-                    <div class="score-circle" style="--score: ${pmfScore};">
-                        <span class="score-value">${pmfScore}</span>
-                    </div>
-                    <div>
-                        <div class="widget-title" style="margin:0;">Product-Market Fit</div>
-                        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Market Demand & Scalability</p>
-                    </div>
+        <div class="dashboard-grid" style="margin-bottom: 22px;">
+            <div class="widget score-widget">
+                <div class="score-circle" style="--score: ${pmfScore};">
+                    <span class="score-value">${pmfScore}</span>
                 </div>
-                <div class="widget score-widget">
-                    <div class="score-circle" style="--score: ${invScore};">
-                        <span class="score-value">${invScore}</span>
-                    </div>
-                    <div>
-                        <div class="widget-title" style="margin:0;">Investor Readiness</div>
-                        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">Funding Attractiveness</p>
-                    </div>
+                <div class="score-info">
+                    <div class="widget-title"><span class="dot dot-purple"></span>Product-Market Fit</div>
+                    <p>Market Demand &amp; Scalability</p>
                 </div>
             </div>
+            <div class="widget score-widget">
+                <div class="score-circle investor" style="--score: ${invScore};">
+                    <span class="score-value">${invScore}</span>
+                </div>
+                <div class="score-info">
+                    <div class="widget-title"><span class="dot dot-pink"></span>Investor Readiness</div>
+                    <p>Funding Attractiveness</p>
+                </div>
+            </div>
+        </div>
 
-            <div class="dashboard-grid" style="margin-bottom: 24px;">
-                <div class="widget">
-                    <div class="widget-title">Product Summary</div>
-                    <div class="content-block">${formatList(summary)}</div>
-                </div>
-                <div class="widget">
-                    <div class="widget-title">Problem Statement</div>
-                    <div class="content-block">${formatList(problem)}</div>
-                </div>
+        <div class="dashboard-grid" style="margin-bottom: 22px;">
+            <div class="widget">
+                <div class="widget-title"><span class="dot dot-green"></span>Product Summary</div>
+                <div class="content-block">${formatList(summary)}</div>
             </div>
+            <div class="widget">
+                <div class="widget-title"><span class="dot dot-red"></span>Problem Statement</div>
+                <div class="content-block">${formatList(problem)}</div>
+            </div>
+        </div>
 
-            <div class="widget" style="margin-bottom: 24px;">
-                <div class="widget-title">SWOT Matrix</div>
-                <div class="swot-grid">
-                    <div class="swot-item strengths">
-                        <h4>Strengths</h4>
-                        ${formatList(sMatch[1])}
-                    </div>
-                    <div class="swot-item weaknesses">
-                        <h4>Weaknesses</h4>
-                        ${formatList(wMatch[1])}
-                    </div>
-                    <div class="swot-item opportunities">
-                        <h4>Opportunities</h4>
-                        ${formatList(oMatch[1])}
-                    </div>
-                    <div class="swot-item threats">
-                        <h4>Threats</h4>
-                        ${formatList(tMatch[1])}
-                    </div>
+        <div class="widget" style="margin-bottom: 22px;">
+            <div class="widget-title"><span class="dot dot-yellow"></span>SWOT Matrix</div>
+            <div class="swot-grid">
+                <div class="swot-item strengths">
+                    <h4>⚡ Strengths</h4>
+                    ${formatList(sMatch[1])}
+                </div>
+                <div class="swot-item weaknesses">
+                    <h4>⚠ Weaknesses</h4>
+                    ${formatList(wMatch[1])}
+                </div>
+                <div class="swot-item opportunities">
+                    <h4>✦ Opportunities</h4>
+                    ${formatList(oMatch[1])}
+                </div>
+                <div class="swot-item threats">
+                    <h4>⚑ Threats</h4>
+                    ${formatList(tMatch[1])}
                 </div>
             </div>
+        </div>
 
-            <div class="dashboard-grid" style="margin-bottom: 24px;">
-                <div class="widget">
-                    <div class="widget-title">Target Audience</div>
-                    <div class="content-block">${formatList(audience)}</div>
-                </div>
-                <div class="widget">
-                    <div class="widget-title">Market Opportunity</div>
-                    <div class="content-block">${formatList(opportunity)}</div>
-                </div>
+        <div class="dashboard-grid" style="margin-bottom: 22px;">
+            <div class="widget">
+                <div class="widget-title"><span class="dot dot-blue"></span>Target Audience</div>
+                <div class="content-block">${formatList(audience)}</div>
             </div>
+            <div class="widget">
+                <div class="widget-title"><span class="dot dot-green"></span>Market Opportunity</div>
+                <div class="content-block">${formatList(opportunity)}</div>
+            </div>
+        </div>
 
-            <div class="dashboard-grid" style="margin-bottom: 24px;">
-                <div class="widget">
-                    <div class="widget-title">Revenue Model</div>
-                    <div class="content-block">${formatList(revenue)}</div>
-                </div>
-            </div>
+        <div class="widget" style="margin-bottom: 22px;">
+            <div class="widget-title"><span class="dot dot-yellow"></span>Revenue Model</div>
+            <div class="content-block">${formatList(revenue)}</div>
+        </div>
 
-            <div class="widget" style="margin-bottom: 24px;">
-                <div class="widget-title">MVP Execution Roadmap</div>
-                <div class="roadmap">
-                    ${roadmapHtml || formatList(roadmap)}
-                </div>
+        <div class="widget" style="margin-bottom: 22px;">
+            <div class="widget-title"><span class="dot dot-purple"></span>MVP Execution Roadmap</div>
+            <div class="roadmap">
+                ${roadmapHtml || formatList(roadmap)}
             </div>
+        </div>
 
-            <div class="dashboard-grid" style="margin-bottom: 24px;">
-                <div class="widget">
-                    <div class="widget-title">Competitor Analysis</div>
-                    <div class="content-block">${formatList(competitors)}</div>
-                </div>
-                <div class="widget">
-                    <div class="widget-title">Risk Factors</div>
-                    <div class="content-block">${formatList(risks)}</div>
-                </div>
+        <div class="dashboard-grid" style="margin-bottom: 22px;">
+            <div class="widget">
+                <div class="widget-title"><span class="dot dot-red"></span>Competitor Analysis</div>
+                <div class="content-block">${formatList(competitors)}</div>
             </div>
+            <div class="widget">
+                <div class="widget-title"><span class="dot dot-yellow"></span>Risk Factors</div>
+                <div class="content-block">${formatList(risks)}</div>
+            </div>
+        </div>
 
-            <div class="widget verdict-widget">
-                <div class="widget-title">Final Verdict & Strategy</div>
-                <div class="content-block">${formatParagraphs(verdict)}</div>
-            </div>
+        <div class="widget verdict-widget">
+            <div class="widget-title"><span class="dot dot-pink"></span>Final Verdict &amp; Strategy</div>
+            <div class="content-block">${formatParagraphs(verdict)}</div>
         </div>
     `;
 

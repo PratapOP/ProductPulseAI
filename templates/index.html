@@ -3,69 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProductPulse AI | Spatial Dashboard</title>
+    <title>ProductPulse AI | Startup Intelligence</title>
+    <meta name="description" content="AI-powered product management assistant that transforms startup ideas into actionable investor-ready business intelligence.">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="ambient-glow glow-primary"></div>
-<div class="ambient-glow glow-accent"></div>
+<!-- Decorative Blobs (image-style wave accents) -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
 
+<!-- Navbar -->
 <nav class="navbar">
     <div class="logo">
         <div class="logo-icon"></div>
         ProductPulse AI
     </div>
-    <div class="nav-tag">
-        Workspace Alpha
-    </div>
+    <div class="nav-tag">Startup Intelligence ✦</div>
 </nav>
 
+<!-- Dashboard Layout -->
 <div class="dashboard-container">
-    
-    <!-- Sidebar: Input Section -->
+
+    <!-- Left: Input Sidebar -->
     <aside class="input-section">
         <div class="header-titles">
-            <h1>Analyze <span>Ideas</span></h1>
-            <p>Generate deep product intelligence, market fit, and execution roadmaps in seconds.</p>
+            <h1>Turn Ideas Into <span>Investor-Ready</span> Products</h1>
+            <p>Get AI-powered product analysis — market fit, SWOT, revenue models, and full MVP roadmaps in seconds.</p>
         </div>
-        
-        <div class="glass-panel idea-form">
-            <textarea 
-                id="ideaInput" 
-                placeholder="Describe your startup concept, target audience, and core problem you're solving...&#10;&#10;e.g., An AI coding assistant tailored specifically for video game engines (Unity/Unreal)."
+
+        <div class="feature-pills">
+            <span class="pill pill-purple">✦ SWOT Analysis</span>
+            <span class="pill pill-green">✔ Market Fit Score</span>
+            <span class="pill pill-pink">♟ Competitor Map</span>
+            <span class="pill pill-yellow">⚡ MVP Roadmap</span>
+        </div>
+
+        <div class="idea-form">
+            <textarea
+                id="ideaInput"
+                placeholder="Describe your startup concept, who it's for, and the problem it solves...&#10;&#10;e.g., An AI-powered meal planner that adapts to your groceries, budget, and dietary needs weekly."
             ></textarea>
-            <button id="analyzeBtn" class="analyze-btn">Initialize Analysis</button>
+            <button id="analyzeBtn" class="analyze-btn">⚡ Initialize Analysis</button>
         </div>
     </aside>
 
-    <!-- Main Content: Results Section -->
-    <main class="results-section glass-panel">
-        
+    <!-- Right: Results Canvas -->
+    <main class="results-section">
+
         <div id="emptyState" class="empty-state fade-in">
-            <div class="empty-state-icon">✨</div>
+            <div class="empty-state-icon">🚀</div>
             <h2>Awaiting Telemetry</h2>
-            <p>Enter your product idea to generate the spatial analysis.</p>
+            <p>Enter your product idea on the left to generate the full intelligence report.</p>
         </div>
 
         <div id="loadingSection" class="loader-container hidden">
             <div class="spinner"></div>
             <h3>Synthesizing Intelligence...</h3>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Processing multi-dimensional market data.</p>
+            <p>Running market analysis, scoring, and roadmap generation.</p>
         </div>
 
-        <div id="resultContainer" class="hidden">
-            <!-- Dynamic Parsed Content Goes Here -->
-        </div>
+        <div id="resultContainer" class="hidden"></div>
 
     </main>
 
 </div>
 
 <footer>
-    ProductPulse AI Spatial Dashboard &copy; 2026. Data generated via Llama 3 API.
+    <p>Built with ♥ by <span>ProductPulse AI</span> &copy; 2026 — Powered by Llama 3 &amp; Groq API</p>
 </footer>
 
 <script src="{{ url_for('static', filename='script.js') }}"></script>
